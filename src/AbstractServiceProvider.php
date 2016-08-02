@@ -238,6 +238,7 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
 
         /** @var \BrightNucleus\ServiceLocator\ContainerInterface $container */
         $container->put(
+            $serviceName,
             function () use ($serviceClass, $injector) {
                 return $injector->make($serviceClass);
             }
