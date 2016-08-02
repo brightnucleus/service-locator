@@ -13,10 +13,23 @@ It extends the [`pimple/pimple`](https://github.com/silexphp/Pimple) package.
 
 ## Table Of Contents
 
+* [About The Bright Nucleus Services Architecture](#about-the-bright-nucleus-services-architecture)
 * [Installation](#installation)
 * [Basic Usage](#basic-usage)
 * [Contributing](#contributing)
 * [License](#license)
+
+## About The Bright Nucleus Services Architecture
+
+This package is part of the Bright Nucleus Services Architecture, which combines a Config management system ([`brightnucleus/config`](https://github.com/brightnucleus/config)), a Dependency Injector ([`brightnucleus/injector`](https://github.com/brightnucleus/injector)), a Service Locator ([`brightnucleus/service-locator`](https://github.com/brightnucleus/service-locator)), a logging subsystem (`brightnucleus/log`), a virtual service provider (`brightnucleus/virtual-services`) and corresponding WordPress plugins (`brightnucleus/wp-services` & `brightnucleus/wp-log`) to form the basis of an architecture that provides the following benefits:
+
+* Configuration of all involved components through Config files that have defaults overrideable through site-specific, environment-specific or custom-injected settings. Write code once, reuse on all sites, in all environments.
+* Proper injector that lets you couple your codebase to interfaces only, deciding at runtime which concrete implementations to inject.
+* Service locator that manages loading order and dependencies. Only load and instantiate code that is effectively needed within the current context, defined through other running real and virtual services.
+* Logging subsystem that provides general logging and error handling, while providing the means to override logging settings at any granularity level.
+* Virtual services that let you incorporate third-party and legacy code into the loading order and dependency management flow of the Service Locator.
+* An architecture that runs just as well within the WordPress page request cycle as through a CLI or REST API request.
+* WordPress-specific helpers that let you monitor the state of your system within the WordPress backend.
 
 ## Installation
 

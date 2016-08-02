@@ -5,7 +5,7 @@
  * @package   BrightNucleus\ServiceLocator
  * @author    Alain Schlesser <alain.schlesser@gmail.com>
  * @license   MIT
- * @link      http://www.brightnucleus.com/
+ * @link      https://www.brightnucleus.com/
  * @copyright 2016 Alain Schlesser, Bright Nucleus
  */
 
@@ -291,5 +291,18 @@ class Container extends PimpleContainer implements ContainerInterface
     public function getQueue()
     {
         return $this->providerQueue;
+    }
+
+    /**
+     * Put an object or a callable into the container.
+     *
+     * @since 0.1.1
+     *
+     * @param string          $id       Key under which to store the object or callable.
+     * @param object|callable $callable Object or callable to put into the container.
+     */
+    public function put($id, $callable)
+    {
+        $this[$id] = $callable;
     }
 }

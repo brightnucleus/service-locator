@@ -5,7 +5,7 @@
  * @package   BrightNucleus\ServiceLocator
  * @author    Alain Schlesser <alain.schlesser@gmail.com>
  * @license   MIT
- * @link      http://www.brightnucleus.com/
+ * @link      https://www.brightnucleus.com/
  * @copyright 2016 Alain Schlesser, Bright Nucleus
  */
 
@@ -17,7 +17,6 @@ use BrightNucleus\Injector\InjectorInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Interop\Container\ContainerInterface;
-use ArrayAccess;
 
 /**
  * Class AbstractServiceProvider.
@@ -31,6 +30,8 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
 {
 
     use ConfigTrait;
+
+    const INJECTOR_MAPPINGS_KEY = 'InjectorMappings';
 
     /**
      * Instance of the container to use.
@@ -88,6 +89,15 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      */
     public function registerServiceProvider()
     {
+        if (! method_exists($this->container, 'addProvider')) {
+            $this->logger->error(
+                sprintf(
+                    'Container of type "%1$s" does not support "addProvider" method.',
+                    get_class($this->container)
+                )
+            );
+        }
+
         $this->container->addProvider($this, $this->getDependencies());
     }
 
@@ -101,20 +111,6 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      * @return array Array of Bright Nucleus Service names.
      */
     public function getDependencies()
-    {
-        return [];
-    }
-
-    /**
-     * Get an array of Bright Nucleus Bus handlers that the service provider provides.
-     *
-     * This should be overridden to define the handlers.
-     *
-     * @since 0.1.0
-     *
-     * @return array Array of Bright Nucleus Bus handlers.
-     */
-    public function getHandlers()
     {
         return [];
     }
@@ -175,7 +171,7 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      */
     protected function getMappingsKey()
     {
-        return 'InjectorMappings';
+        return static::INJECTOR_MAPPINGS_KEY;
     }
 
     /**
@@ -195,46 +191,57 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
         ContainerInterface $container
     ) {
         if (! $this->injector) {
-            $this->logger->error(sprintf(
-                'Missing Injector instance to register Service "%1$s" ("%2$s").',
-                $serviceName,
-                $serviceClass
-            ));
+            $this->logger->error(
+                sprintf(
+                    'Missing Injector instance to register Service "%1$s" ("%2$s").',
+                    $serviceName,
+                    $serviceClass
+                )
+            );
 
             return;
         }
 
         if ($this->container->has($serviceName)) {
-            $this->logger->warning(sprintf(
-                'Tried to register existing Service "%1$s" ("%2$s").',
-                $serviceName,
-                $serviceClass
-            ));
+            $this->logger->warning(
+                sprintf(
+                    'Tried to register existing Service "%1$s" ("%2$s").',
+                    $serviceName,
+                    $serviceClass
+                )
+            );
 
             return;
         }
 
-        $this->logger->debug(sprintf(
-            'Registering Service "%1$s" ("%2$s").',
-            $serviceName,
-            $serviceClass
-        ));
-
-        if (! $this->container instanceof ArrayAccess) {
-            $this->logger->warning(sprintf(
-                'Cannot register Service "%1$s" ("%2$s") with unknown Container type.',
+        $this->logger->debug(
+            sprintf(
+                'Registering Service "%1$s" ("%2$s").',
                 $serviceName,
                 $serviceClass
-            ));
+            )
+        );
+
+        if (! method_exists($this->container, 'put')) {
+            $this->logger->warning(
+                sprintf(
+                    'Cannot register Service "%1$s" ("%2$s") with unknown Container type.',
+                    $serviceName,
+                    $serviceClass
+                )
+            );
 
             return;
         }
 
         $injector = $this->injector;
 
-        $container[$serviceName] = function () use ($serviceClass, $injector) {
-            return $injector->make($serviceClass);
-        };
+        /** @var \BrightNucleus\ServiceLocator\ContainerInterface $container */
+        $container->put(
+            function () use ($serviceClass, $injector) {
+                return $injector->make($serviceClass);
+            }
+        );
     }
 
     /**

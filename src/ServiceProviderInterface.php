@@ -5,7 +5,7 @@
  * @package   BrightNucleus\ServiceLocator
  * @author    Alain Schlesser <alain.schlesser@gmail.com>
  * @license   MIT
- * @link      http://www.brightnucleus.com/
+ * @link      https://www.brightnucleus.com/
  * @copyright 2016 Alain Schlesser, Bright Nucleus
  */
 
@@ -65,37 +65,4 @@ interface ServiceProviderInterface
      * @return array Array of Bright Nucleus Service names.
      */
     public function getDependencies();
-
-    /**
-     * Get an array of Bright Nucleus Bus commands that the service provider provides.
-     *
-     * This should be overridden to define the commands.
-     *
-     * @since 0.1.0
-     *
-     * @return array Array of Bright Nucleus Bus commands.
-     */
-    public function getCommands();
-
-    /**
-     * Get an array of Bright Nucleus Bus events that the service provider provides.
-     *
-     * This should be overridden to define the events.
-     *
-     * @since 0.1.0
-     *
-     * @return array Array of Bright Nucleus Bus events.
-     */
-    public function getEvents();
-
-    /**
-     * Get an array of Bright Nucleus Bus handlers that the service provider provides.
-     *
-     * This should be overridden to define the handlers.
-     *
-     * @since 0.1.0
-     *
-     * @return array Array of Bright Nucleus Bus handlers.
-     */
-    public function getHandlers();
 }
