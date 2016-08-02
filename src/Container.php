@@ -167,7 +167,7 @@ class Container extends PimpleContainer implements ContainerInterface
     public function hasAllServices(array $services = [])
     {
         foreach ($services as $service) {
-            if (! isset($this[$service])) {
+            if (! $this->has($service)) {
                 return false;
             }
         }
@@ -194,7 +194,7 @@ class Container extends PimpleContainer implements ContainerInterface
             $provider->register($this);
 
             foreach ($values as $key => $value) {
-                $this[$key] = $value;
+                $this->put($key, $value);
             }
 
             $this->serviceProviders[$provider->getName()] = $provider;
@@ -236,12 +236,12 @@ class Container extends PimpleContainer implements ContainerInterface
                 // Found a service whose dependencies are met. Remove from queue and register.
                 unset($this->providerQueue[$name]);
 
+                $changed = true;
+
                 $this->registerServiceProvider(
                     $data['provider'],
                     $data['values']
                 );
-
-                $changed = true;
             }
         } catch (Exception $exception) {
             throw new RuntimeException(
