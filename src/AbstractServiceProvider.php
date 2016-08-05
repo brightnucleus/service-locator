@@ -17,7 +17,6 @@ use BrightNucleus\Injector\InjectorInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Interop\Container\ContainerInterface as InteropContainer;
-use BrightNucleus\ServiceLocator\ContainerInterface as BNContainerInterface;
 
 /**
  * Class AbstractServiceProvider.
@@ -39,7 +38,7 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @var BNContainerInterface
+     * @var ContainerInterface
      */
     protected $container;
 
@@ -66,14 +65,14 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @param ConfigInterface      $config    Injected Config instance.
-     * @param BNContainerInterface $container Injected Container instance.
-     * @param InjectorInterface    $injector  Optional. Injected Injector instance.
-     * @param LoggerInterface      $logger    Optional. Injected Logger instance.
+     * @param ConfigInterface    $config    Injected Config instance.
+     * @param ContainerInterface $container Injected Container instance.
+     * @param InjectorInterface  $injector  Optional. Injected Injector instance.
+     * @param LoggerInterface    $logger    Optional. Injected Logger instance.
      */
     public function __construct(
         ConfigInterface $config,
-        BNContainerInterface $container,
+        ContainerInterface $container,
         InjectorInterface $injector = null,
         LoggerInterface $logger = null
     ) {
@@ -237,7 +236,7 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
 
         $injector = $this->injector;
 
-        /** @var BNContainerInterface $container */
+        /** @var ContainerInterface $container */
         $container->put(
             $serviceName,
             function () use ($serviceClass, $injector) {

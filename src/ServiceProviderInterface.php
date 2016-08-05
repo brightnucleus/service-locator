@@ -11,7 +11,7 @@
 
 namespace BrightNucleus\ServiceLocator;
 
-use Interop\Container\ContainerInterface;
+use Interop\Container\ContainerInterface as InteropContainer;
 
 /**
  * Interface ServiceProviderInterface.
@@ -32,9 +32,9 @@ interface ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @param ContainerInterface $container A container instance
+     * @param InteropContainer $container A container instance
      */
-    public function register(ContainerInterface $container);
+    public function register(InteropContainer $container);
 
     /**
      * Return the name of the service provider;

@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.0] - 2016-08-05
+### Changed
+- Another try to eliminate `ContainerInterface` naming conflict.
+
 ## [0.2.0] - 2016-08-05
 ### Changed
 - Eliminate `ContainerInterface` naming conflict.
@@ -27,6 +31,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial release to GitHub.
 
+[0.3.0]: https://github.com/brightnucleus/service-locator/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/brightnucleus/service-locator/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/brightnucleus/service-locator/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/brightnucleus/service-locator/compare/v0.1.1...v0.1.2
