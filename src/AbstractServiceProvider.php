@@ -16,7 +16,8 @@ use BrightNucleus\Config\ConfigTrait;
 use BrightNucleus\Injector\InjectorInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Interop\Container\ContainerInterface;
+use Interop\Container\ContainerInterface as InteropContainer;
+use BrightNucleus\ServiceLocator\ContainerInterface as BNContainerInterface;
 
 /**
  * Class AbstractServiceProvider.
@@ -38,7 +39,7 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @var ContainerInterface
+     * @var BNContainerInterface
      */
     protected $container;
 
@@ -65,14 +66,14 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @param ConfigInterface    $config    Injected Config instance.
-     * @param ContainerInterface $container Injected Container instance.
-     * @param InjectorInterface  $injector  Optional. Injected Injector instance.
-     * @param LoggerInterface    $logger    Optional. Injected Logger instance.
+     * @param ConfigInterface      $config    Injected Config instance.
+     * @param BNContainerInterface $container Injected Container instance.
+     * @param InjectorInterface    $injector  Optional. Injected Injector instance.
+     * @param LoggerInterface      $logger    Optional. Injected Logger instance.
      */
     public function __construct(
         ConfigInterface $config,
-        ContainerInterface $container,
+        BNContainerInterface $container,
         InjectorInterface $injector = null,
         LoggerInterface $logger = null
     ) {
@@ -122,9 +123,9 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @param ContainerInterface $container A container instance.
+     * @param InteropContainer $container A container instance.
      */
-    public function register(ContainerInterface $container)
+    public function register(InteropContainer $container)
     {
         $this->logger->debug(sprintf(
             'Registering Service Provider "%1$s" ("%2$s").',
@@ -179,16 +180,16 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @param string             $serviceName  Name of the service to register.
-     * @param string             $serviceClass Interface/Class of the service.
-     * @param ContainerInterface $container    Container to register the service with.
+     * @param string           $serviceName  Name of the service to register.
+     * @param string           $serviceClass Interface/Class of the service.
+     * @param InteropContainer $container    Container to register the service with.
      *
      * @return void
      */
     protected function registerService(
         $serviceName,
         $serviceClass,
-        ContainerInterface $container
+        InteropContainer $container
     ) {
         if (! $this->injector) {
             $this->logger->error(
@@ -236,7 +237,7 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
 
         $injector = $this->injector;
 
-        /** @var \BrightNucleus\ServiceLocator\ContainerInterface $container */
+        /** @var BNContainerInterface $container */
         $container->put(
             $serviceName,
             function () use ($serviceClass, $injector) {
@@ -252,9 +253,9 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      *
      * @since 0.1.0
      *
-     * @param ContainerInterface $container Instance of the container.
+     * @param InteropContainer $container Instance of the container.
      */
-    protected function initServices(ContainerInterface $container)
+    protected function initServices(InteropContainer $container)
     {
     }
 }

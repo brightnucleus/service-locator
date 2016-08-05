@@ -13,7 +13,7 @@ namespace BrightNucleus\ServiceLocator;
 
 use ArrayAccess;
 use RuntimeException;
-use Interop\Container\ContainerInterface as InteropContainerInterface;
+use Interop\Container\ContainerInterface as InteropContainer;
 
 /**
  * Interface ContainerInterface.
@@ -23,7 +23,7 @@ use Interop\Container\ContainerInterface as InteropContainerInterface;
  * @package BrightNucleus\ServiceLocator
  * @author  Alain Schlesser <alain.schlesser@gmail.com>
  */
-interface ContainerInterface extends InteropContainerInterface, ArrayAccess
+interface ContainerInterface extends InteropContainer, ArrayAccess
 {
 
     /**
