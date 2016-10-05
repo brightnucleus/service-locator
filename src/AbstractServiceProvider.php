@@ -31,7 +31,9 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
 
     use ConfigTrait;
 
+    // Configuration keys.
     const INJECTOR_MAPPINGS_KEY = 'InjectorMappings';
+    const LOG_REGISTRATIONS_KEY = 'LogRegistrations';
 
     /**
      * Instance of the container to use.
@@ -61,6 +63,15 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
     protected $logger;
 
     /**
+     * Whether to log the registrations.
+     *
+     * @since 0.3.1
+     *
+     * @var bool
+     */
+    protected $logRegistrations;
+
+    /**
      * Instantiate an AbstractServiceProvider object.
      *
      * @since 0.1.0
@@ -77,9 +88,12 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
         LoggerInterface $logger = null
     ) {
         $this->processConfig($config);
-        $this->container = $container;
-        $this->injector  = $injector;
-        $this->logger    = $logger ?: new NullLogger();
+        $this->container        = $container;
+        $this->injector         = $injector;
+        $this->logger           = $logger ?: new NullLogger();
+        $this->logRegistrations = (bool)$this->hasConfigKey(static::LOG_REGISTRATIONS_KEY)
+            ? $this->getConfigKey(static::LOG_REGISTRATIONS_KEY)
+            : false;
     }
 
     /**
@@ -126,11 +140,13 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
      */
     public function register(InteropContainer $container)
     {
-        $this->logger->debug(sprintf(
-            'Registering Service Provider "%1$s" ("%2$s").',
-            $this->getName(),
-            get_class($this)
-        ));
+        if ($this->logRegistrations) {
+            $this->logger->debug(sprintf(
+                'Registering Service Provider "%1$s" ("%2$s").',
+                $this->getName(),
+                get_class($this)
+            ));
+        }
 
         $this->registerInjections();
 
@@ -214,13 +230,15 @@ abstract class AbstractServiceProvider implements ServiceProviderInterface
             return;
         }
 
-        $this->logger->debug(
-            sprintf(
-                'Registering Service "%1$s" ("%2$s").',
-                $serviceName,
-                $serviceClass
-            )
-        );
+        if ($this->logRegistrations) {
+            $this->logger->debug(
+                sprintf(
+                    'Registering Service "%1$s" ("%2$s").',
+                    $serviceName,
+                    $serviceClass
+                )
+            );
+        }
 
         if (! method_exists($this->container, 'put')) {
             $this->logger->warning(
